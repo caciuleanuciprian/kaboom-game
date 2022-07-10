@@ -2682,15 +2682,21 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   }, "default");
 
   // main.js
+  var WIDTH = 1024;
+  var HEIGHT = 576;
+  var SCALE = 1.25;
   no({
     background: [134, 135, 247],
-    width: 1024,
-    height: 576,
-    scale: 1.5
+    width: WIDTH,
+    height: HEIGHT,
+    scale: SCALE
   });
   loadRoot("sprites/");
-  loadSprite("player", "/player/Idle.png");
+  loadAseprite("player", "/playerSpritesheet/player.png", "/playerSpritesheet/player.json");
   loadSprite("tile1", "/tiles/1 Tiles/Tile_01.png");
+  loadSprite("tile2", "/tiles/1 Tiles/Tile_02.png");
+  loadSprite("tile3", "/tiles/1 Tiles/Tile_03.png");
+  loadSprite("tile4", "/tiles/1 Tiles/Tile_04.png");
   var LEVELS20 = [
     [
       "                                                                                                ",
@@ -2710,15 +2716,18 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       "                                                                                                ",
       "                                                                                                ",
       "                                                                                                ",
-      "================================================================================================",
-      "================================================================================================"
+      "{==============================================================================================}",
+      "------------------------------------------------------------------------------------------------"
     ]
   ];
   var levelConf = {
     width: 32,
     height: 32,
     pos: vec2(0, 0),
-    "=": () => [sprite("tile1"), area(), solid(), "ground"]
+    "{": () => [sprite("tile1"), area(), solid(), "ground"],
+    "=": () => [sprite("tile2"), area(), solid(), "ground"],
+    "}": () => [sprite("tile3"), area(), solid(), "ground"],
+    "-": () => [sprite("tile3"), area(), solid(), "underground"]
   };
   scene("start", () => {
     add([
@@ -2744,7 +2753,10 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       lifespan(1, { fade: 0.5 })
     ]);
     const player = add([
-      sprite("player"),
+      sprite("player", {
+        animSpeed: 0.75,
+        anim: "Idle"
+      }),
       pos(100, 200),
       area(),
       body(),
@@ -2756,5 +2768,57 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
         speed: 240
       }
     ]);
+    const SPEED = 200;
+    onKeyDown("right", () => {
+      player.flipX(false);
+      player.move(SPEED, 0);
+    });
+    onKeyPress("right", () => {
+      player.play("Walk");
+    });
+    onKeyRelease("right", () => {
+      player.play("Idle");
+    });
+    onKeyDown("left", () => {
+      player.flipX(true);
+      if (toScreen(player.pos).x > 20) {
+        player.move(-SPEED, 0);
+      }
+    });
+    onKeyPress("left", () => {
+      player.play("Walk");
+    });
+    onKeyRelease("left", () => {
+      player.play("Idle");
+    });
+    onKeyPress("space", () => {
+      if (player.isGrounded()) {
+        player.jump();
+      }
+    });
+    onKeyPress("z", () => {
+      player.play("Attack1");
+    });
+    onKeyRelease("z", () => {
+      player.play("Idle");
+    });
+    onKeyPress("x", () => {
+      player.play("Attack2");
+    });
+    onKeyRelease("x", () => {
+      player.play("Idle");
+    });
+    onKeyPress("c", () => {
+      player.play("Emote");
+    });
+    onKeyRelease("c", () => {
+      player.play("Idle");
+    });
+    player.onUpdate(() => {
+      var currentCam = camPos();
+      if (currentCam.x < player.pos.x) {
+        camPos(player.pos.x, currentCam.y);
+      }
+    });
   });
 })();
