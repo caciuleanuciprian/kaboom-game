@@ -2686,7 +2686,6 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   var HEIGHT = 576;
   var SCALE = 1.25;
   no({
-    background: [134, 135, 247],
     width: WIDTH,
     height: HEIGHT,
     scale: SCALE
@@ -2697,6 +2696,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   loadSprite("tile2", "/tiles/1 Tiles/Tile_02.png");
   loadSprite("tile3", "/tiles/1 Tiles/Tile_03.png");
   loadSprite("tile4", "/tiles/1 Tiles/Tile_04.png");
+  loadSprite("background", "/tiles/2 Background/Day/Background.png");
   var LEVELS20 = [
     [
       "                                                                                                ",
@@ -2752,6 +2752,14 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       layer("ui"),
       lifespan(1, { fade: 0.5 })
     ]);
+    add([
+      sprite("background", { width: width(), height: height() }),
+      pos(width() / 2, height() / 2),
+      origin("center"),
+      layer("bg"),
+      scale(SCALE),
+      fixed()
+    ]);
     const player = add([
       sprite("player", {
         animSpeed: 0.75,
@@ -2764,8 +2772,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       "player",
       "friendly",
       {
-        dead: false,
-        speed: 240
+        dead: false
       }
     ]);
     const SPEED = 200;

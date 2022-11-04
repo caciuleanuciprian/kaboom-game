@@ -5,7 +5,6 @@ const HEIGHT = 576;
 const SCALE = 1.25;
 
 kaboom({
-  background: [134, 135, 247],
   width: WIDTH,
   height: HEIGHT,
   scale: SCALE,
@@ -77,40 +76,7 @@ loadSprite("tile1", "/tiles/1 Tiles/Tile_01.png");
 loadSprite("tile2", "/tiles/1 Tiles/Tile_02.png");
 loadSprite("tile3", "/tiles/1 Tiles/Tile_03.png");
 loadSprite("tile4", "/tiles/1 Tiles/Tile_04.png");
-
-// add([sprite("tile1"), pos(0, 570), area(), solid()]);
-// add([sprite("tile1"), pos(32, 570), area(), solid()]);
-// add([sprite("tile1"), pos(64, 570), area(), solid()]);
-// add([sprite("tile1"), pos(96, 570), area(), solid()]);
-// add([sprite("tile1"), pos(128, 570), area(), solid()]);
-// add([sprite("tile1"), pos(160, 570), area(), solid()]);
-// add([sprite("tile1"), pos(192, 570), area(), solid()]);
-// add([sprite("tile1"), pos(224, 570), area(), solid()]);
-// add([sprite("tile1"), pos(256, 570), area(), solid()]);
-// add([sprite("tile1"), pos(288, 570), area(), solid()]);
-// add([sprite("tile1"), pos(320, 570), area(), solid()]);
-// add([sprite("tile1"), pos(352, 570), area(), solid()]);
-// add([sprite("tile1"), pos(384, 570), area(), solid()]);
-// add([sprite("tile1"), pos(416, 570), area(), solid()]);
-// add([sprite("tile1"), pos(448, 570), area(), solid()]);
-// add([sprite("tile1"), pos(480, 570), area(), solid()]);
-// add([sprite("tile1"), pos(512, 570), area(), solid()]);
-// add([sprite("tile1"), pos(544, 570), area(), solid()]);
-// add([sprite("tile1"), pos(576, 570), area(), solid()]);
-// add([sprite("tile1"), pos(608, 570), area(), solid()]);
-// add([sprite("tile1"), pos(640, 570), area(), solid()]);
-// add([sprite("tile1"), pos(672, 570), area(), solid()]);
-// add([sprite("tile1"), pos(704, 570), area(), solid()]);
-// add([sprite("tile1"), pos(736, 570), area(), solid()]);
-// add([sprite("tile1"), pos(768, 570), area(), solid()]);
-// add([sprite("tile1"), pos(800, 570), area(), solid()]);
-// add([sprite("tile1"), pos(832, 570), area(), solid()]);
-// add([sprite("tile1"), pos(864, 570), area(), solid()]);
-// add([sprite("tile1"), pos(896, 570), area(), solid()]);
-// add([sprite("tile1"), pos(928, 570), area(), solid()]);
-// add([sprite("tile1"), pos(960, 570), area(), solid()]);
-// add([sprite("tile1"), pos(992, 570), area(), solid()]);
-// add([sprite("tile1"), pos(1024, 570), area(), solid()]);
+loadSprite("background", "/tiles/2 Background/Day/Background.png");
 
 const LEVELS20 = [
   [
@@ -294,6 +260,15 @@ scene("game", (levelNumber = 0) => {
     lifespan(1, { fade: 0.5 }),
   ]);
 
+  add([
+    sprite("background", { width: width(), height: height() }),
+    pos(width() / 2, height() / 2),
+    origin("center"),
+    layer("bg"),
+    scale(SCALE),
+    fixed(),
+  ]);
+
   const player = add([
     sprite("player", {
       animSpeed: 0.75,
@@ -303,12 +278,10 @@ scene("game", (levelNumber = 0) => {
     area(),
     body(),
     health(8),
-    //   doubleJump(),
     "player",
     "friendly",
     {
       dead: false,
-      speed: 240,
     },
   ]);
 
